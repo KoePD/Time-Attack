@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Time:Attack Final Leaderboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Big+Shoulders+Display:wght@700;900&display=swap');
+
+        @font-face {
+            font-family: 'DSDigital';
+            src: url('DS-DIGIB.TTF');
+        }
+
+        /* Tvinger alt til å være 100% gjennomsiktig */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: transparent !important;
+            background-color: transparent !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .leaderboard-container {
+            position: relative;
+            width: 572px;
+            height: 1024px;
+            background-image: url('bakgrunn.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-color: transparent !important;
+        }
+
+        #live-player-name {
+            position: absolute;
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-size: 28px;
+            color: #ffffff;
+            text-transform: uppercase;
+            width: 100%;
+            text-align: center;
+            top: 315px; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        #live-timer-display {
+            position: absolute;
+            font-family: 'DSDigital', sans-serif;
+            font-size: 64px;
+            color: #03ff46;
+            text-shadow: 0 0 15px rgba(3, 255, 70, 0.7);
+            width: 100%;
+            text-align: center;
+            top: 361px;
+            left: 0;
+        }
+
+        .leaderboard-wrapper {
+            position: absolute;
+            display: grid;
+            grid-template-rows: repeat(10, 39.8px);
+            gap: 0;
+            width: 445px;
+            top: 468px;
+            left: 68px;
+        }
+
+        .entry-row {
+            display: grid;
+            grid-template-columns: 285px 35px 125px;
+            align-items: center;
+            height: 100%;
+            transform: translateY(-3px);
+        }
+
+        .name-part {
+            font-family: 'Bebas Neue', sans-serif; /* Endret fra 'Big Shoulders...' */
+            font-size: 22px; /* Justert opp fra 18px for bedre lesbarhet */
+            color: #ffffff;
+            padding-left: 108px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            letter-spacing: 1px; /* Gir litt mer luft mellom bokstavene */
+        }
+
+        .bom-part {
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-size: 20px;
+            color: #ffffff;
+            text-align: center;
+            width: 100%;
+            transform: translateX(10px); 
+        }
+
+        .time-part {
+            font-family: 'DSDigital', sans-serif;
+            font-size: 26px; 
+            color: #ffffff;
+            text-align: center;
+            width: 100%;
+            padding-right: 18px;
+            box-sizing: border-box;
+            transform: translateX(5px);
+        }
+
+        .entry-row:nth-child(-n+3) .time-part {
+            color: #03ff46;
+            text-shadow: 0 0 8px rgba(3, 255, 70, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="leaderboard-container">
+        <div id="live-timer-display">00:00.00</div>
+        <div class="leaderboard-wrapper" id="main-list"></div>
+    </div>
+
+    <script>
+    // DIN NYE DEPLOY-URL FRA APPS SCRIPT
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw72au2kizQVUpD_fpHcC2EBjcePo3G9vtg-V2IdlAroDGPJ2-JsojakjGy1dVul-CU/exec";
+
+    let lastDataString = "";
+    let timerInterval = null;
+    let lastStatus = "";
+
+    async function updateLeaderboard() {
+        try {
+            // Henter data (Topp 10 + Klokkestatus)
+            const response = await fetch(`${webAppUrl}?cmd=getLeaderboard&cb=${Date.now()}`);
+            const data = await response.json();
+            
+            // --- 1. HÅNDTER LIVE TIMER (STORE TALL) ---
+            if (data.status !== lastStatus) {
+                lastStatus = data.status;
+                
+                if (data.status === "start") {
+                    startLocalTimer(data.serverTime);
+                } else if (data.status === "stop") {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                } else if (data.status === "reset") {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    document.getElementById("live-timer-display").innerText = "00:00.00";
+                }
+            }
+
+            // --- 2. HÅNDTER TABELLEN (TOPP 10) ---
+            const currentPantryString = JSON.stringify(data.pantry);
+            if (currentPantryString !== lastDataString) {
+                lastDataString = currentPantryString;
+                renderTable(data.pantry);
+            }
+
+        } catch (e) {
+            console.error("Feil ved oppdatering:", e);
+        }
+    }
+
+    // Funksjon som tegner selve lista
+    function renderTable(players) {
+        const container = document.getElementById('main-list');
+        let html = "";
+
+        for (let i = 0; i < 10; i++) {
+            let p = players[i] || { name: "", errors: "", totalTime: "" };
+            let hasData = p.name !== "";
+
+            html += `
+                <div class="entry-row">
+                    <div class="name-part">${p.name}</div>
+                    <div class="bom-part">${hasData ? p.errors : ""}</div>
+                    <div class="time-part">${p.totalTime}</div>
+                </div>`;
+        }
+        container.innerHTML = html;
+    }
+
+    // Funksjon som driver den store klokka lokalt
+    function startLocalTimer(serverStartTime) {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        timerInterval = setInterval(() => {
+            const now = Date.now();
+            const diff = now - serverStartTime;
+            
+            if (diff >= 0) {
+                let m = Math.floor(diff / 60000);
+                let s = Math.floor((diff % 60000) / 1000);
+                let ms = Math.floor((diff % 1000) / 10);
+                
+                document.getElementById("live-timer-display").innerText = 
+                    m.toString().padStart(2, '0') + ":" + 
+                    s.toString().padStart(2, '0') + "." + 
+                    ms.toString().padStart(2, '0');
+            }
+        }, 30); // Oppdateres 33 ganger i sekundet for flyt
+    }
+
+    // Sjekker Google Sheets hvert 3. sekund for endringer
+    setInterval(updateLeaderboard, 3000);
+    updateLeaderboard();
+</script>
+</body>
+</html>

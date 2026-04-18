@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Attack Controller</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Orbitron:wght@700&display=swap');
+        html, body { background-color: #0a0a0a; margin: 0; padding: 0; color: white; display: flex; flex-direction: column; align-items: center; font-family: 'Big Shoulders Display', sans-serif; }
+        .timer-display { font-size: 80px; font-family: 'Orbitron', sans-serif; color: #03ff46; text-shadow: 0 0 15px rgba(3, 255, 70, 0.7); margin: 20px 0; }
+        .wrapper { width: 90%; max-width: 400px; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .input-group { width: 100%; margin: 10px 0; }
+        label { display: block; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+        input { width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: 2px solid #333; background: #1a1a1a; color: white; box-sizing: border-box; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
+        .btn { padding: 20px; font-size: 20px; font-weight: 900; border-radius: 10px; border: none; cursor: pointer; text-transform: uppercase; font-family: inherit; transition: 0.2s; }
+        .btn:active { transform: scale(0.95); }
+        .start { background: #03ff46; color: black; grid-column: span 2; }
+        .stop { background: #ff4500; color: white; }
+        .reset { background: #555; color: white; }
+        .save { background: #bda852; color: black; grid-column: span 2; font-size: 24px; margin-top: 10px; }
+        #status { margin-top: 15px; color: #03ff46; font-weight: bold; height: 20px; }
+        #hidden_iframe { display: none; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="timer-display" id="display">00:00.00</div>
+        
+        <form action="https://script.google.com/macros/s/AKfycbxt2G7NogpVI0ZG4biXW43686ZhNREjRq_nOs2uBXct4EP3MOul4nf-7hHadNi41tBt/exec" method="POST" id="saveForm" target="hidden_iframe">
+            <div class="input-group">
+                <label>Spillernavn</label>
+                <input type="text" name="name" id="playerName" placeholder="Navn..." required autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>Antall bom (5s straff)</label>
+                <input type="number" name="errors" id="errors" value="0" min="0">
+            </div>
+            
+            <input type="hidden" name="rawTime" id="rawTimeInput">
+
+            <div class="controls">
+                <div class="input-group">
+                    <label>Pris / Type</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px; background: #1a1a1a; padding: 10px; border-radius: 8px; border: 1px solid #333;">
+        
+                <div style="display: flex; align-items: center; white-space: nowrap;">
+                    <input type="radio" id="priceStd" name="priceGroup" value="50" checked style="width: auto; margin-right: 5px; transform: scale(1.2);"> 
+                    <label for="priceStd" style="color: white; margin: 0; font-size: 14px;">Std (50,-)</label>
+                </div>
+
+                <div style="display: flex; align-items: center; white-space: nowrap;">
+                    <input type="radio" id="priceHappy" name="priceGroup" value="25" style="width: auto; margin-right: 5px; transform: scale(1.2);"> 
+                    <label for="priceHappy" style="color: white; margin: 0; font-size: 14px;">Happy (25,-)</label>
+                </div>
+
+                <div style="display: flex; align-items: center; white-space: nowrap;">
+                    <input type="radio" id="pricePremie" name="priceGroup" value="PREMIE" style="width: auto; margin-right: 5px; transform: scale(1.2);"> 
+                    <label for="pricePremie" style="color: white; margin: 0; font-size: 14px; font-weight: bold;">PREMIE</label>
+                </div>
+
+                <div style="display: flex; align-items: center; white-space: nowrap;">
+                    <input type="radio" id="priceGull" name="priceGroup" value="GULLBILLETT" style="width: auto; margin-right: 5px; transform: scale(1.2);"> 
+                    <label for="priceGull" style="color: gold; margin: 0; font-size: 14px; font-weight: bold;">GULLBILLETT</label>
+                </div>
+        
+            </div>
+        </div>
+                <button type="button" class="btn start" onclick="timerControl('start')">START</button>
+                <button type="button" class="btn stop" onclick="timerControl('stop')">STOPP</button>
+                <button type="button" class="btn reset" onclick="timerControl('reset')">RESET</button>
+                <button type="button" class="btn save" onclick="submitForm()">LAGRE RESULTAT</button>
+            </div>
+        </form>
+            <div id="correctionPanel" style="display: none; background: #222; border: 2px solid gold; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: left;">
+            <h3 style="color: gold; margin-top: 0; font-size: 16px;">RETT OPP FEIL</h3>
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label style="color: #ccc; font-size: 12px;">Fullt Navn</label>
+                <input type="text" id="corrName" placeholder="Skriv navn på nytt" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #444;">
+            </div>
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label style="color: #ccc; font-size: 12px;">Korrekt Tid (mm:ss.ms)</label>
+                <input type="text" id="corrTime" placeholder="00:00.00" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #444; font-family: monospace; font-size: 18px; text-align: center;">
+            </div>
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label style="color: #ccc; font-size: 12px;">Antall Bom</label>
+                <input type="number" id="corrErrors" value="0" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #444;">
+            </div>
+                <button type="button" onclick="saveManualEntry()" style="background: #28a745; color: white; font-weight: bold; padding: 12px; width: 100%; border-radius: 4px; border: none; cursor: pointer; margin-top: 5px;">
+                SEND KORREKT DATA
+                </button>
+                <button type="button" onclick="document.getElementById('correctionPanel').style.display='none'" style="background: transparent; color: #777; width: 100%; border: none; margin-top: 10px; font-size: 11px; cursor: pointer;">
+            Avbryt
+                </button>
+            </div>
+
+                <button type="button" onclick="undoLastSave()" id="undoBtn" style="background: #333; color: #777; margin-top: 30px; font-size: 11px; padding: 8px; border: 1px solid #444; border-radius: 4px; width: 100%; cursor: pointer;">
+                ANGRE SISTE LAGRING (Slett rad i ark)
+            </button>
+        <div id="status">KLAR</div>
+    </div>
+
+    <iframe name="hidden_iframe" id="hidden_iframe"></iframe>
+
+    <script>
+    // LIM INN DIN NYE DEPLOY-URL HER!
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw72au2kizQVUpD_fpHcC2EBjcePo3G9vtg-V2IdlAroDGPJ2-JsojakjGy1dVul-CU/exec"; 
+
+    let startTime, timerInterval, elapsedTime = 0;
+
+    function timeToString(time) {
+        let mm = Math.floor(time / 60000);
+        let ss = Math.floor((time % 60000) / 1000);
+        let ms = Math.floor((time % 1000) / 10);
+        return `${mm.toString().padStart(2, "0")}:${ss.toString().padStart(2, "0")}.${ms.toString().padStart(2, "0")}`;
+    }
+
+    function timerControl(cmd) {
+        const display = document.getElementById("display");
+        const statusText = document.getElementById("status");
+        
+        if (cmd === 'start') {
+            if (timerInterval) return; 
+
+            // NYTT: Send start-beskjed til Google Sheets (LiveControl-fanen)
+            fetch(`${webAppUrl}?cmd=sendControl&action=start`, { mode: 'no-cors' });
+
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                display.innerText = timeToString(elapsedTime);
+            }, 10);
+            statusText.innerText = "TIDEN GÅR...";
+        } 
+        else if (cmd === 'stop') {
+            // NYTT: Send stopp-beskjed til Google Sheets
+            fetch(`${webAppUrl}?cmd=sendControl&action=stop`, { mode: 'no-cors' });
+
+            clearInterval(timerInterval);
+            timerInterval = null; 
+            statusText.innerText = "STOPPET";
+        } 
+        else if (cmd === 'reset') {
+            // NYTT: Send reset-beskjed til Google Sheets
+            fetch(`${webAppUrl}?cmd=sendControl&action=reset`, { mode: 'no-cors' });
+
+            clearInterval(timerInterval);
+            timerInterval = null;
+            elapsedTime = 0;
+            display.innerText = "00:00.00";
+            document.getElementById("playerName").value = "";
+            document.getElementById("errors").value = "0";
+            statusText.innerText = "KLAR";
+        }
+    }
+
+    function submitForm() {
+        const name = document.getElementById("playerName").value;
+        const errors = document.getElementById("errors").value;
+        const rawTime = document.getElementById("display").innerText;
+        const price = document.querySelector('input[name="priceGroup"]:checked').value;
+
+        if (!name) { alert("Skriv navn!"); return; }
+
+        document.getElementById("status").innerText = "LAGRER...";
+        
+        // Når vi lagrer resultatet, stopper vi også live-klokka automatisk
+        fetch(`${webAppUrl}?cmd=sendControl&action=stop`, { mode: 'no-cors' });
+
+        fetch(`${webAppUrl}?cmd=save&name=${encodeURIComponent(name)}&errors=${errors}&rawTime=${rawTime}&price=${price}`, { mode: 'no-cors' })
+            .then(() => {
+                document.getElementById("status").innerText = "✅ LAGRET!";
+                setTimeout(() => timerControl('reset'), 1000);
+            });
+    }
+
+    function undoLastSave() {
+        if (!confirm("Vil du slette siste rad i Google Sheets og rette tiden manuelt?")) return;
+        document.getElementById("status").innerText = "SLETTER...";
+        fetch(`${webAppUrl}?cmd=deleteLast`, { mode: 'no-cors' })
+            .then(() => {
+                document.getElementById("status").innerText = "Slettet! Åpner korrigering...";
+                document.getElementById("correctionPanel").style.display = "block";
+            });
+    }
+
+    function saveManualEntry() {
+        const name = document.getElementById("corrName").value;
+        const time = document.getElementById("corrTime").value;
+        const errors = document.getElementById("corrErrors").value;
+        if (!name || !time) { alert("Fyll ut navn og tid!"); return; }
+        document.getElementById("status").innerText = "LAGRER KORRIGERING...";
+        fetch(`${webAppUrl}?cmd=save&name=${encodeURIComponent(name)}&errors=${errors}&rawTime=${time}&price=50`, { mode: 'no-cors' })
+            .then(() => {
+                document.getElementById("status").innerText = "✅ KORRIGERT!";
+                document.getElementById("correctionPanel").style.display = "none";
+            });
+    }
+</script>
+</body>
+</html>
