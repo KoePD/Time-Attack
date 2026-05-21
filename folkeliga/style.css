@@ -1,347 +1,88 @@
 :root {
-    --color-bg-main: #083c2c;
-    --color-bg-dark: #041f17;
+    --color-bg-main: #0c1110;
+    --color-bg-panel: #131a18;
+    --color-bg-dark: #060808;
     --color-accent: #00af79;
-    --color-accent-rgb: 0, 175, 121;
     --color-danger: #ff3b30;
     --color-text: #ffffff;
-    --color-text-muted: #a2b7b1;
+    --color-text-muted: #8fa39e;
     --font-main: 'Poppins', sans-serif;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--color-bg-main); color: var(--color-text); font-family: var(--font-main); -webkit-font-smoothing: antialiased; }
 
-body {
-    background-color: var(--color-bg-main);
-    color: var(--color-text);
-    font-family: var(--font-main);
-    line-height: 1.6;
-}
+/* Navibar */
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 0 6%; height: 75px; background-color: var(--color-bg-dark); border-bottom: 3px solid var(--color-accent); position: sticky; top: 0; z-index: 100; }
+.nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
+.nav-item { color: var(--color-text); text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; transition: color 0.2s; }
+.nav-item:hover, .nav-item.active { color: var(--color-accent); }
 
-/* Navigasjon */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 6%;
-    background-color: var(--color-bg-dark);
-    border-bottom: 2px solid var(--color-accent);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+.logo-link { display: flex; align-items: center; text-decoration: none; height: 100%; }
+.nav-logo { height: 38px; width: auto; display: block; }
 
-.logo {
-    font-weight: 900;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
-}
+.nav-item-back { color: var(--color-accent); text-decoration: none; font-weight: 700; font-size: 0.85rem; border: 1px solid var(--color-accent); padding: 6px 14px; border-radius: 3px; text-transform: uppercase; transition: all 0.2s; }
+.nav-item-back:hover { background-color: var(--color-accent); color: var(--color-bg-dark); }
 
-.logo span {
-    color: var(--color-accent);
-}
+/* Layout Containers */
+.es-main-container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+.es-section-wrapper { margin-bottom: 50px; scroll-margin-top: 100px; }
+.es-section-title { border-bottom: 2px solid #222; padding-bottom: 10px; margin-bottom: 25px; }
+.es-section-title h2 { text-transform: uppercase; font-weight: 900; font-size: 1.6rem; }
 
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 25px;
-    align-items: center;
-}
+/* Matchcenter Scoreboard */
+.es-matchcenter-header { background-color: var(--color-bg-dark); padding: 12px 20px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+.es-matchcenter-header h2 { font-size: 0.95rem; font-weight: 900; color: var(--color-text); letter-spacing: 0.5px; }
+.es-live-dot { color: var(--color-danger); font-weight: 900; font-size: 0.85rem; letter-spacing: 1px; animation: pulse-dot 1.5s infinite; }
 
-.nav-item {
-    color: var(--color-text);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.95rem;
-    transition: color 0.2s;
-}
+.es-live-scoreboard { display: flex; background-color: var(--color-bg-panel); padding: 40px 20px; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.es-team { flex: 2; display: flex; flex-direction: column; }
+.es-team.away { align-items: flex-end; }
+.es-player-title { font-size: 1.8rem; font-weight: 900; color: #fff; }
+.es-status-sub { font-size: 0.8rem; color: var(--color-accent); font-weight: 700; text-transform: uppercase; }
 
-.nav-item:hover, .nav-item.active {
-    color: var(--color-accent);
-}
+.es-score-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.es-numbers { font-size: 3.5rem; font-weight: 900; color: #fff; line-height: 1; display: flex; gap: 15px; align-items: center; }
+.es-dash { color: var(--color-text-muted); font-size: 2.5rem; }
+.es-clock-badge { background-color: #000; color: var(--color-accent); font-weight: 900; font-size: 0.9rem; padding: 4px 12px; border-radius: 3px; margin-top: 15px; letter-spacing: 0.5px; }
 
-/* Den nye tilbake-knappen til hovedsiden */
-.nav-item-back {
-    color: var(--color-accent);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border: 1px solid var(--color-accent);
-    padding: 6px 14px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+/* Klokke-nerve ved kritisk tid */
+.es-clock-badge.pulse-critical { color: var(--color-danger); animation: glow-danger 1s infinite alternate; }
 
-.nav-item-back:hover {
-    background-color: var(--color-accent);
-    color: var(--color-bg-dark);
-    box-shadow: 0 0 10px rgba(0, 175, 121, 0.3);
-}
+.es-meta-bar { display: flex; justify-content: space-between; background-color: var(--color-bg-dark); padding: 12px 20px; font-size: 0.85rem; color: var(--color-text-muted); border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; }
+.es-meta-bar strong { color: #fff; }
+.es-shotclock-alert strong { color: var(--color-accent); }
 
-/* Layoutstrukturer */
-.main-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
+/* Tabell (Eliteserien-stil) */
+.es-table-card { background-color: var(--color-bg-panel); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+.es-table { width: 100%; border-collapse: collapse; }
+.es-table th, .es-table td { padding: 14px 20px; text-align: left; }
+.es-table th { background-color: rgba(0, 0, 0, 0.4); color: var(--color-text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+.es-table tr { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
-.section-wrapper {
-    margin-bottom: 60px;
-    scroll-margin-top: 100px;
-}
+/* Kvalifiserings-striper på radene */
+.es-row-final { border-left: 4px solid var(--color-accent) !important; background: linear-gradient(90deg, rgba(0, 175, 121, 0.06) 0%, transparent 100%); }
+.es-row-safe { border-left: 4px solid var(--color-text-muted) !important; }
 
-.section-header {
-    margin-bottom: 25px;
-    border-left: 5px solid var(--color-accent);
-    padding-left: 15px;
-}
+/* Nummer-merker for plassering */
+.es-pos-badge { display: inline-flex; width: 28px; height: 28px; background-color: #2a3532; color: #fff; font-weight: 900; border-radius: 3px; align-items: center; justify-content: center; font-size: 0.85rem; }
+.es-pos-badge.gold { background-color: var(--color-accent); color: var(--color-bg-dark); }
+.es-pos-badge.silver { background-color: var(--color-text-muted); color: var(--color-bg-dark); }
 
-.section-header h2 {
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    font-weight: 900;
-}
+/* Tippe Sone */
+.es-tippe-card { background-color: var(--color-bg-panel); padding: 25px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+.btn-es-primary { background-color: var(--color-accent); color: var(--color-bg-dark); border: none; padding: 12px 24px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; border-radius: 3px; cursor: pointer; }
+.es-bet-row { display: flex; justify-content: space-between; align-items: center; }
+.es-bet-title { font-weight: 700; font-size: 1.1rem; }
+.es-bet-actions { display: flex; gap: 10px; }
+.btn-es-bet { background-color: var(--color-bg-dark); color: #fff; border: 1px solid #333; padding: 12px 20px; font-weight: 700; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+.btn-es-bet:hover, .btn-es-bet.selected { border-color: var(--color-accent); color: var(--color-accent); background-color: rgba(0, 175, 121, 0.1); }
 
-.section-header p {
-    color: var(--color-text-muted);
-}
-
-/* Live Match Widget */
-.live-badge-container {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.badge-live {
-    background-color: var(--color-danger);
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    animation: pulse-live 2s infinite;
-}
-
-.live-widget {
-    display: flex;
-    background-color: var(--color-bg-dark);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 30px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.team-player {
-    flex: 2;
-}
-
-.team-player h3 {
-    font-size: 1.6rem;
-    font-weight: 900;
-}
-
-.player-sub {
-    font-size: 0.8rem;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    font-weight: 600;
-}
-
+/* Video og generelt */
+.video-container { margin-top: 20px; background: #000; border-radius: 4px; overflow: hidden; aspect-ratio: 16/9; }
+.video-placeholder { display: flex; height: 100%; align-items: center; justify-content: center; color: var(--color-text-muted); font-weight: 700; }
+.hidden { display: none !important; }
 .text-right { text-align: right; }
 
-.score-display {
-    flex: 1;
-    text-align: center;
-    font-size: 3.5rem;
-    font-weight: 900;
-    color: var(--color-accent);
-    background: rgba(0, 0, 0, 0.2);
-    padding: 5px 20px;
-    border-radius: 8px;
-}
-
-.score-colon {
-    color: var(--color-text);
-    margin: 0 5px;
-}
-
-/* Meta Data Grid (Klokker) */
-.live-meta-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.meta-card {
-    background-color: var(--color-bg-dark);
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    border-bottom: 3px solid rgba(255, 255, 255, 0.1);
-}
-
-.meta-label {
-    display: block;
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.meta-value {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--color-accent);
-}
-
-/* Nerve-animasjon for kritisk tid (<5 min) */
-.meta-value.pulse-critical {
-    color: var(--color-danger);
-    animation: text-glow-danger 1s infinite alternate;
-}
-
-/* Tabell Styling */
-.table-responsive {
-    background-color: var(--color-bg-dark);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.koepd-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.koepd-table th, .koepd-table td {
-    padding: 16px 20px;
-    text-align: left;
-}
-
-.koepd-table th {
-    background-color: rgba(0, 0, 0, 0.3);
-    color: var(--color-accent);
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-}
-
-.koepd-table tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.row-top-tier {
-    background: linear-gradient(90deg, rgba(var(--color-accent-rgb), 0.12) 0%, transparent 100%);
-    border-left: 5px solid var(--color-accent) !important;
-}
-
-.pos-num {
-    font-weight: 900;
-    font-size: 1.1rem;
-}
-
-.text-center { text-align: center !important; }
-.text-accent { color: var(--color-accent); }
-
-/* Tippe-panel og Knapper */
-.tippe-box {
-    background-color: var(--color-bg-dark);
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.btn-primary {
-    background-color: var(--color-accent);
-    color: var(--color-bg-dark);
-    border: none;
-    padding: 12px 24px;
-    font-weight: 700;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-}
-
-.btn-primary:hover {
-    background-color: #00cd8d;
-    transform: translateY(-1px);
-}
-
-.tippe-match-card {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.match-title {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-.tippe-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 15px;
-}
-
-.btn-tippe {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    font-weight: 700;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-tippe:hover, .btn-tippe.selected {
-    border-color: var(--color-accent);
-    background-color: rgba(var(--color-accent-rgb), 0.15);
-    color: var(--color-accent);
-}
-
-.video-container {
-    margin-top: 20px;
-    background: #000;
-    border-radius: 12px;
-    overflow: hidden;
-    aspect-ratio: 16/9;
-}
-
-.video-placeholder {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-muted);
-    font-weight: 700;
-}
-
-.hidden { display: none !important; }
-.footer { text-align: center; padding: 40px; color: var(--color-text-muted); font-size: 0.85rem; }
-
-/* Animasjoner */
-@keyframes pulse-live {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.03); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes text-glow-danger {
-    from { text-shadow: 0 0 10px rgba(255, 59, 48, 0.5); }
-    to { text-shadow: 0 0 20px rgba(255, 59, 48, 1); }
-}
+@keyframes pulse-dot { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+@keyframes glow-danger { from { box-shadow: 0 0 5px rgba(255,59,48,0.5); } to { box-shadow: 0 0 15px rgba(255,59,48,1); } }
