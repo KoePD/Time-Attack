@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KoePD | Offisiell YouTube Hub</title>
+    <title>KoePD | Offisiell Hjemmeside</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -14,33 +14,55 @@
             <img src="/koepd/koepdlogo.png" alt="KoePD Sport Logo" class="nav-logo">
         </a>
         <ul class="nav-links">
+            <li><a href="#nyheter" class="nav-item">Nyheter</a></li>
             <li><a href="#videoer" class="nav-item">Videoer</a></li>
             <li><a href="/koepd/folkeliga/" class="btn-liga-glow">🎱 FOLKELIGAEN</a></li>
         </ul>
     </nav>
 
-    <header class="hero-main">
-        <div class="hero-content">
-            <h1>Velkommen til <span>KoePD</span></h1>
-            <p>Norges råeste biljardkanal på YouTube. We bringer deg action, instrukser og fete liveshows direkte fra Unique Biljardklubb.</p>
-            <div class="hero-actions">
-                <a href="/koepd/folkeliga/" class="btn-primary-main">Se Folkeligaen Live & Tipp</a>
-                <a href="https://www.youtube.com/@koepd" target="_blank" class="btn-secondary-main">Besøk YouTube-kanalen</a>
+    <header class="es-hero">
+        <div class="es-hero-overlay"></div>
+        <div class="es-hero-content">
+            <span class="es-tag">KOEPD TV-PRODUKSJON</span>
+            <h1>FØLG DRAMATIKKEN LIVE</h1>
+            <p>Norges mest nytenkende biljardkanal. Vi henter strukturen fra fotballen og lager direktesendt show fra Unique Biljardklubb.</p>
+            <div class="es-hero-actions">
+                <a href="/koepd/folkeliga/" class="btn-es-primary">Gå til Live-Senter</a>
+                <a href="https://www.youtube.com/koepd" target="_blank" class="btn-es-secondary">Se på YouTube</a>
             </div>
         </div>
     </header>
 
-    <section id="videoer" class="section-main">
-        <h2>Siste fra kanalen</h2>
-        <div class="video-grid-placeholder">
-            <div class="vid-card">▶️ Siste Video (Automatisk feed / manuell link)</div>
-            <div class="vid-card">🎱 Biljard-vlogg #12</div>
-            <div class="vid-card">🔥 KØ-pÅdd OPEN høydepunkter</div>
+    <main class="es-main-container" id="nyheter">
+        <div class="es-section-title">
+            <h2>Aktuelt</h2>
         </div>
-    </section>
+        
+        <div class="es-news-grid">
+            <article class="es-news-card main-story">
+                <div class="es-news-img-placeholder">📸 BANNER: Matchdag 1 nærmer seg!</div>
+                <div class="es-news-text">
+                    <span class="es-card-tag">Folkeligaen</span>
+                    <h3>Alt klart for avspark 30. august: Førstemann til mølla på CueScore!</h3>
+                    <p>4 profiler er invitert. De 4 siste plassene kjempes det om på mandag. Unique-medlemmer har forkjøpsrett...</p>
+                </div>
+            </article>
+            
+            <div class="es-news-sidebar">
+                <div class="es-sidebar-item">
+                    <span class="es-card-tag">KØ-pÅdd OPEN</span>
+                    <h4>Promoterings-søndag 22. november bekreftet i studio</h4>
+                </div>
+                <div class="es-sidebar-item">
+                    <span class="es-card-tag">Regler</span>
+                    <h4>Slik fungerer 10-Ball med streng 30s shotclock</h4>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    <footer class="footer-main">
-        <p>&copy; 2026 KoePD YouTube. Utviklet for biljardmiljøet.</p>
+    <footer class="es-footer">
+        <p>&copy; 2026 KoePD Sport & Media. Live fra Unique Biljardklubb.</p>
     </footer>
 
 </body>
