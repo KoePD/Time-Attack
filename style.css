@@ -9,12 +9,33 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background-color: var(--color-bg-main); color: var(--color-text); font-family: var(--font-main); }
 
-.navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 6%; background-color: var(--color-bg-dark); border-bottom: 2px solid var(--color-accent); position: sticky; top: 0; z-index: 100; }
-.logo { font-weight: 900; font-size: 1.5rem; }
-.logo span { color: var(--color-accent); }
+/* Fast, ryddig høyde på navbaren */
+.navbar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 0 6%; 
+    height: 70px; /* Låser høyden til en profesjonell størrelse */
+    background-color: var(--color-bg-dark); 
+    border-bottom: 2px solid var(--color-accent); 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+}
+
 .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
 .nav-item { color: var(--color-text); text-decoration: none; font-weight: 700; transition: color 0.2s; }
 .nav-item:hover { color: var(--color-accent); }
+
+/* Logo tilpasset den faste høyden */
+.logo-link { display: flex; align-items: center; text-decoration: none; height: 100%; }
+.nav-logo { 
+    height: 40px; /* Tvinger logoen ned til å passe perfekt */
+    width: auto; 
+    display: block; 
+    transition: transform 0.2s ease; 
+}
+.nav-logo:hover { transform: scale(1.05); }
 
 /* Pulserende ligaknapp i menyen */
 .btn-liga-glow {
@@ -22,7 +43,7 @@ body { background-color: var(--color-bg-main); color: var(--color-text); font-fa
     color: var(--color-bg-dark);
     text-decoration: none;
     font-weight: 900;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 6px;
     box-shadow: 0 0 15px rgba(0, 175, 121, 0.4);
     animation: pulse-glow 2s infinite;
