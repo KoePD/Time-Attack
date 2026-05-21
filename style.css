@@ -1,64 +1,86 @@
 :root {
-    --color-bg-main: #0c1110;    /* Ekstremt mørk, nesten svart grønnfarge (Eliteserien-stil) */
-    --color-bg-panel: #131a18;   /* Panelbakgrunn */
-    --color-bg-dark: #060808;
-    --color-accent: #00af79;
-    --color-text: #ffffff;
-    --color-text-muted: #8fa39e;
+    --color-bg-dark-portal: #0e1413;   /* Dyp, moderne kulsvart-grønn bakgrunn */
+    --color-bg-panel: #131a18;        /* Panelbakgrunn med dybde */
+    --color-accent: #00af79;          /* Din turkise signaturfarge */
+    --color-text-light: #ffffff;
+    --color-text-muted: #8fa39e;      /* Bedre lesbarhet på mørk bunn */
     --font-main: 'Poppins', sans-serif;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background-color: var(--color-bg-main); color: var(--color-text); font-family: var(--font-main); -webkit-font-smoothing: antialiased; }
+body { background-color: var(--color-bg-dark-portal); color: var(--color-text-light); font-family: var(--font-main); -webkit-font-smoothing: antialiased; }
 
-/* Navibar */
-.navbar { display: flex; justify-content: space-between; align-items: center; padding: 0 6%; height: 75px; background-color: var(--color-bg-dark); border-bottom: 3px solid var(--color-accent); position: sticky; top: 0; z-index: 100; }
+/* 1. Profesjonell, Fast Navibar */
+.navbar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 0 6%; 
+    height: 75px; /* Låst høyde */
+    background-color: var(--color-bg-panel); 
+    border-bottom: 2px solid var(--color-accent); 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+}
 .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
-.nav-item { color: var(--color-text); text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.2s; }
+.nav-item { color: var(--color-text-light); text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.2s; }
 .nav-item:hover { color: var(--color-accent); }
 
+/* Logo Sizing */
 .logo-link { display: flex; align-items: center; text-decoration: none; height: 100%; }
-.nav-logo { height: 38px; width: auto; display: block; }
+.nav-logo { height: 40px; width: auto; display: block; }
 
-.btn-liga-glow { background-color: var(--color-accent); color: var(--color-bg-dark); text-decoration: none; font-weight: 900; padding: 8px 18px; border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(0, 175, 121, 0.3); animation: pulse-glow 2s infinite; }
+/* Pulserende ligaknapp i menyen */
+.btn-liga-glow {
+    background-color: var(--color-accent);
+    color: var(--color-bg-panel);
+    text-decoration: none;
+    font-weight: 900;
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    box-shadow: 0 0 15px rgba(0, 175, 121, 0.4);
+    animation: pulse-glow 2s infinite;
+}
 
-/* Eliteserien Hero */
-.es-hero { position: relative; height: 75vh; min-height: 500px; background-color: #083c2c; display: flex; align-items: center; padding: 0 8%; overflow: hidden; }
-.es-hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, #060808 20%, rgba(6, 8, 8, 0.7) 60%, transparent 100%); z-index: 1; }
-.es-hero-content { position: relative; z-index: 2; max-width: 650px; text-align: left; }
+/* 2. Eliteserien Hero - med dybde og struktur */
+.es-hero { position: relative; height: 70vh; min-height: 450px; background-color: #083c2c; display: flex; align-items: center; padding: 0 8%; overflow: hidden; border-bottom: 3px solid rgba(255,255,255,0.03); }
+.es-hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, var(--color-bg-dark-portal) 20%, rgba(14, 20, 19, 0.7) 60%, transparent 100%); z-index: 1; }
+.es-hero-content { position: relative; z-index: 2; max-width: 600px; text-align: left; }
 .es-tag { color: var(--color-accent); font-weight: 900; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 10px; }
-.es-hero-content h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px; }
-.es-hero-content p { color: var(--color-text-muted); font-size: 1.15rem; margin-bottom: 35px; }
+.es-hero-content h1 { font-size: 3.2rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px; color: #fff; letter-spacing: -1px; }
+.es-hero-content p { color: var(--color-text-muted); font-size: 1.1rem; margin-bottom: 35px; }
 
 .es-hero-actions { display: flex; gap: 15px; }
-.btn-es-primary { background-color: var(--color-accent); color: var(--color-bg-dark); padding: 14px 28px; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 0.9rem; border-radius: 3px; letter-spacing: 0.5px; transition: background 0.2s; }
+.btn-es-primary { background-color: var(--color-accent); color: var(--color-bg-panel); padding: 14px 28px; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 0.9rem; border-radius: 3px; letter-spacing: 0.5px; transition: background 0.2s; }
 .btn-es-primary:hover { background-color: #00cd8d; }
 .btn-es-secondary { border: 2px solid white; color: white; padding: 12px 26px; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 0.9rem; border-radius: 3px; letter-spacing: 0.5px; transition: all 0.2s; }
 .btn-es-secondary:hover { background-color: white; color: black; }
 
-/* Main Content Layout */
+/* 3. Nyhets- layout - Profesjonell grid */
 .es-main-container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
-.es-section-title { border-bottom: 2px solid #222; padding-bottom: 10px; margin-bottom: 30px; }
-.es-section-title h2 { text-transform: uppercase; font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; }
+.es-section-title { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; }
+.es-section-title h2 { text-transform: uppercase; font-weight: 900; font-size: 1.6rem; color: var(--color-accent); /* Tvinger frem din farge på overskrifter */ letter-spacing: -0.5px; }
 
-/* News Grid */
 .es-news-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-.es-news-card { background-color: var(--color-bg-panel); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-.es-news-img-placeholder { background-color: #083c2c; height: 320px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-text-muted); }
+.es-news-card { background-color: var(--color-bg-panel); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.2s; }
+.es-news-card:hover { transform: translateY(-3px); }
+.es-news-img-placeholder { background-color: #083c2c; height: 320px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-text-muted); border-bottom: 2px solid rgba(255,255,255,0.03); }
 .es-news-text { padding: 25px; }
 .es-card-tag { color: var(--color-accent); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
-.es-news-text h3 { font-size: 1.6rem; font-weight: 900; line-height: 1.2; margin-bottom: 10px; }
+.es-news-text h3 { font-size: 1.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 10px; color: #fff; }
 .es-news-text p { color: var(--color-text-muted); font-size: 0.95rem; }
 
 /* Sidebar */
 .es-news-sidebar { display: flex; flex-direction: column; gap: 20px; }
 .es-sidebar-item { background-color: var(--color-bg-panel); padding: 20px; border-radius: 4px; border-left: 3px solid var(--color-accent); border-top: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
-.es-sidebar-item h4 { font-size: 1.1rem; font-weight: 700; margin-top: 5px; line-height: 1.3; }
+.es-sidebar-item h4 { font-size: 1.1rem; font-weight: 700; margin-top: 5px; line-height: 1.3; color: #fff; }
 
-.es-footer { text-align: center; padding: 5px; color: var(--color-text-muted); font-size: 0.85rem; background-color: var(--color-bg-dark); border-top: 1px solid #222; }
+.es-footer { text-align: center; padding: 40px; color: var(--color-text-muted); font-size: 0.85rem; background-color: var(--color-bg-panel); border-top: 2px solid #222; }
 
 @keyframes pulse-glow {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
+    0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 175, 121, 0.4); }
+    50% { transform: scale(1.04); box-shadow: 0 0 25px rgba(0, 175, 121, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 175, 121, 0.4); }
 }
